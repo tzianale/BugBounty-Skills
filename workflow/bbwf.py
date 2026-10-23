@@ -256,6 +256,20 @@ def cmd_engagements(args):
               f"(confirmed={conf})  scope: in={len(sc.in_scope)} out={len(sc.out_of_scope)}")
 
 
+def cmd_dashboard(args):
+    import dashboard as DB
+    html = DB.render(args.base)
+    out = args.out or os.path.join(os.path.expanduser(args.base), "dashboard.html")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as fh:
+        fh.write(html)
+    print(f"✓ wrote {out}")
+    print("  open it in a browser (file://). Local snapshot — do not commit or share it.")
+    if args.open:
+        import webbrowser
+        webbrowser.open("file://" + os.path.abspath(out))
+
+
 def cmd_status(args):
     eng = _eng(args)
     s = eng.summary()
@@ -348,6 +362,11 @@ def build_parser():
 
     q = sub.add_parser("status", help="engagement overview"); q.add_argument("--name", required=True)
     q.set_defaults(fn=cmd_status)
+
+    q = sub.add_parser("dashboard", help="render a local HTML findings overview (all engagements)")
+    q.add_argument("--out", help="output path (default <base>/dashboard.html)")
+    q.add_argument("--open", action="store_true", help="open it in a browser after writing")
+    q.set_defaults(fn=cmd_dashboard)
 
     q = sub.add_parser("report", help="render report.md"); q.add_argument("--name", required=True)
     q.set_defaults(fn=cmd_report)

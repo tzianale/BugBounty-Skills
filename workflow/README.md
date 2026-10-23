@@ -96,6 +96,24 @@ and `#` comments ignored) — handy for pasting a program's published scope.
 program has it in scope (deny-wins still applies per program), so it's safe to use
 as a "can I touch this at all?" gate when you're in several programs at once.
 
+## Findings dashboard (local HTML)
+
+A read-only visual overview of what you found, where — across all engagements.
+
+```bash
+python3 workflow/bbwf.py dashboard            # writes <base>/dashboard.html
+python3 workflow/bbwf.py dashboard --open     # and open it in a browser
+```
+
+It is a **single self-contained HTML file** with the data embedded at generation
+time: no server, no network, works offline. Summary cards (totals, per-severity,
+confirmed, scope warnings), filters (engagement / status / severity / search),
+a severity-sorted table, and click-to-expand evidence/PoC per finding.
+
+PRIVACY: the file contains your findings (targets, evidence, PoCs). It is written
+under the engagements base (`~/.bb-engagements/`, outside this repo) and must NOT
+be committed or shared. Regenerate it for a fresh snapshot.
+
 ## Scope pattern forms
 
 | Pattern | Matches |
