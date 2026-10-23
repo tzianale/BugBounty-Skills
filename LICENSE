@@ -22,9 +22,14 @@ SOFTWARE.
 
 ---
 
-NOTE: This repository is a curated subset of the SnailSploit/claude-red
-project (https://github.com/SnailSploit/claude-red). It contains only 25
-SKILL.md files from the web, api, auth, recon, cloud, and utility categories,
-redistributed unmodified under the terms of the MIT License above. All
-copyright remains with the original authors (SnailSploit / Kai Aizen). No
-other files from the upstream project are included.
+NOTE: The MIT License above covers the `offensive-*` skills in this repository,
+which are a curated subset of the SnailSploit/claude-red project
+(https://github.com/SnailSploit/claude-red), redistributed unmodified. All
+copyright for that portion remains with the original authors
+(SnailSploit / Kai Aizen).
+
+This repository ALSO bundles `hunt-*` skills (and the upgraded
+recon/offensive-osint-methodology skill) sourced from
+elementalsouls/Claude-BugHunter, which are licensed separately under
+Creative Commons Attribution 4.0 International (CC BY 4.0), NOT the MIT License
+above. See ATTRIBUTION.md for the full breakdown and required attribution.
