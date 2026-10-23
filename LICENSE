@@ -22,14 +22,18 @@ SOFTWARE.
 
 ---
 
-NOTE: The MIT License above covers the `offensive-*` skills in this repository,
-which are a curated subset of the SnailSploit/claude-red project
-(https://github.com/SnailSploit/claude-red), redistributed unmodified. All
-copyright for that portion remains with the original authors
+NOTE: The MIT License above covers the skills in this repository that are
+sourced from the SnailSploit/claude-red project
+(https://github.com/SnailSploit/claude-red), redistributed with modifications.
+All copyright for that portion remains with the original authors
 (SnailSploit / Kai Aizen).
 
-This repository ALSO bundles `hunt-*` skills (and the upgraded
-recon/offensive-osint-methodology skill) sourced from
-elementalsouls/Claude-BugHunter, which are licensed separately under
-Creative Commons Attribution 4.0 International (CC BY 4.0), NOT the MIT License
-above. See ATTRIBUTION.md for the full breakdown and required attribution.
+This repository ALSO bundles skills sourced from elementalsouls/Claude-BugHunter,
+which are licensed separately under Creative Commons Attribution 4.0 International
+(CC BY 4.0), NOT the MIT License above.
+
+Skill folders and frontmatter names have been renamed with a `shilahunter-`
+prefix; this is a modification, and original authorship is unchanged. Because the
+license of a skill can no longer be told from its name, ATTRIBUTION.md lists
+exactly which skills are under which license. See ATTRIBUTION.md for the full
+breakdown and required attribution.

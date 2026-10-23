@@ -34,7 +34,7 @@ count=0
 # keeping the <category>/<name>/ path relative to Skills/.
 while IFS= read -r skill_md; do
   skill_dir="$(dirname "$skill_md")"
-  rel="${skill_dir#"$SRC_DIR"/}"          # e.g. web/offensive-xss
+  rel="${skill_dir#"$SRC_DIR"/}"          # e.g. web/shilahunter-xss
   target="$DEST_DIR/$rel"
   mkdir -p "$target"
   cp "$skill_md" "$target/SKILL.md"

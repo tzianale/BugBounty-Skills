@@ -3,8 +3,10 @@
 A curated, private collection of **64 bug-bounty-focused Claude skills**, drawn
 from two upstream projects and organized as `Skills/<category>/<name>/SKILL.md`:
 
-- **25 `offensive-*` skills** from [SnailSploit/claude-red](https://github.com/SnailSploit/claude-red) (MIT)
-- **39 `hunt-*` skills** (plus an upgraded OSINT-methodology skill) from [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) (CC BY 4.0)
+- **24 skills** from [SnailSploit/claude-red](https://github.com/SnailSploit/claude-red) — MIT
+- **40 skills** from [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) — CC BY 4.0 (incl. the upgraded osint-methodology)
+
+All skills are renamed with the `shilahunter-` prefix; original authorship is unchanged.
 
 See [`ATTRIBUTION.md`](./ATTRIBUTION.md) for exact provenance and license terms —
 the two sets are under **different licenses**.
@@ -50,105 +52,105 @@ this repo), so live findings are never committed.
 ### web (30)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `offensive-business-logic` | Business-logic flaws and workflow abuse | claude-red |
-| `offensive-deserialization` | Insecure deserialization (Java, PHP, .NET) | claude-red |
-| `offensive-file-upload` | Malicious / unrestricted file upload | claude-red |
-| `offensive-graphql` | GraphQL introspection, batching, injection | claude-red |
-| `offensive-idor` | Insecure direct object references / BOLA | claude-red |
-| `offensive-open-redirect` | Open redirect discovery and chaining | claude-red |
-| `offensive-parameter-pollution` | HTTP parameter pollution (HPP) | claude-red |
-| `offensive-race-condition` | Race conditions via parallel requests | claude-red |
-| `offensive-rce` | Remote code execution techniques | claude-red |
-| `offensive-request-smuggling` | HTTP request smuggling / desync | claude-red |
-| `offensive-sqli` | SQL injection | claude-red |
-| `offensive-ssrf` | Server-side request forgery (+ cloud metadata) | claude-red |
-| `offensive-ssti` | Server-side template injection | claude-red |
-| `offensive-waf-bypass` | WAF / filter evasion | claude-red |
-| `offensive-xss` | Cross-site scripting | claude-red |
-| `offensive-xxe` | XML external entity injection | claude-red |
-| `hunt-cache-poison` | Web cache poisoning / deception | BugHunter |
-| `hunt-clickjacking` | Clickjacking / UI redress | BugHunter |
-| `hunt-cors` | CORS misconfiguration | BugHunter |
-| `hunt-csrf` | Cross-site request forgery | BugHunter |
-| `hunt-dom` | DOM-based client-side vulnerabilities | BugHunter |
-| `hunt-host-header` | Host-header injection / routing abuse | BugHunter |
-| `hunt-html-injection` | HTML injection / dangling markup | BugHunter |
-| `hunt-ldap` | LDAP injection | BugHunter |
-| `hunt-lfi` | Local file inclusion / path traversal | BugHunter |
-| `hunt-nosqli` | NoSQL operator injection (Mongo/Couch) | BugHunter |
-| `hunt-source-leak` | Source-code / secret leakage | BugHunter |
-| `hunt-websocket` | WebSocket security testing | BugHunter |
-| `hunt-exceptional-conditions` | Verbose errors / fail-open info disclosure | BugHunter |
-| `hunt-misc` | Misc web classes (CRLF, invite/verif bypass, …) | BugHunter |
+| `shilahunter-business-logic` | Business-logic flaws and workflow abuse | claude-red |
+| `shilahunter-deserialization` | Insecure deserialization (Java, PHP, .NET) | claude-red |
+| `shilahunter-file-upload` | Malicious / unrestricted file upload | claude-red |
+| `shilahunter-graphql` | GraphQL introspection, batching, injection | claude-red |
+| `shilahunter-idor` | Insecure direct object references / BOLA | claude-red |
+| `shilahunter-open-redirect` | Open redirect discovery and chaining | claude-red |
+| `shilahunter-parameter-pollution` | HTTP parameter pollution (HPP) | claude-red |
+| `shilahunter-race-condition` | Race conditions via parallel requests | claude-red |
+| `shilahunter-rce` | Remote code execution techniques | claude-red |
+| `shilahunter-request-smuggling` | HTTP request smuggling / desync | claude-red |
+| `shilahunter-sqli` | SQL injection | claude-red |
+| `shilahunter-ssrf` | Server-side request forgery (+ cloud metadata) | claude-red |
+| `shilahunter-ssti` | Server-side template injection | claude-red |
+| `shilahunter-waf-bypass` | WAF / filter evasion | claude-red |
+| `shilahunter-xss` | Cross-site scripting | claude-red |
+| `shilahunter-xxe` | XML external entity injection | claude-red |
+| `shilahunter-cache-poison` | Web cache poisoning / deception | BugHunter |
+| `shilahunter-clickjacking` | Clickjacking / UI redress | BugHunter |
+| `shilahunter-cors` | CORS misconfiguration | BugHunter |
+| `shilahunter-csrf` | Cross-site request forgery | BugHunter |
+| `shilahunter-dom` | DOM-based client-side vulnerabilities | BugHunter |
+| `shilahunter-host-header` | Host-header injection / routing abuse | BugHunter |
+| `shilahunter-html-injection` | HTML injection / dangling markup | BugHunter |
+| `shilahunter-ldap` | LDAP injection | BugHunter |
+| `shilahunter-lfi` | Local file inclusion / path traversal | BugHunter |
+| `shilahunter-nosqli` | NoSQL operator injection (Mongo/Couch) | BugHunter |
+| `shilahunter-source-leak` | Source-code / secret leakage | BugHunter |
+| `shilahunter-websocket` | WebSocket security testing | BugHunter |
+| `shilahunter-exceptional-conditions` | Verbose errors / fail-open info disclosure | BugHunter |
+| `shilahunter-misc` | Misc web classes (CRLF, invite/verif bypass, …) | BugHunter |
 
 ### api (7)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `offensive-api-abuse` | API business-logic abuse and chaining | claude-red |
-| `offensive-api-security` | API security testing methodology | claude-red |
-| `hunt-api-misconfig` | API misconfiguration | BugHunter |
-| `hunt-grpc` | gRPC API testing | BugHunter |
-| `hunt-shadow-api` | Shadow / undocumented API discovery | BugHunter |
-| `hunt-spa-api` | SPA-backend API attack surface | BugHunter |
-| `hunt-fintech-graphql` | Fintech GraphQL (money-movement, ledger IDOR) | BugHunter |
+| `shilahunter-api-abuse` | API business-logic abuse and chaining | claude-red |
+| `shilahunter-api-security` | API security testing methodology | claude-red |
+| `shilahunter-api-misconfig` | API misconfiguration | BugHunter |
+| `shilahunter-grpc` | gRPC API testing | BugHunter |
+| `shilahunter-shadow-api` | Shadow / undocumented API discovery | BugHunter |
+| `shilahunter-spa-api` | SPA-backend API attack surface | BugHunter |
+| `shilahunter-fintech-graphql` | Fintech GraphQL (money-movement, ledger IDOR) | BugHunter |
 
 ### auth (10)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `offensive-jwt` | JWT attacks (alg confusion, kid/jku, tampering) | claude-red |
-| `offensive-oauth` | OAuth / OIDC flow abuse | claude-red |
-| `hunt-ato` | Account takeover chains | BugHunter |
-| `hunt-auth-bypass` | Authentication bypass | BugHunter |
-| `hunt-brute-force` | Credential brute-force / rate-limit gaps | BugHunter |
-| `hunt-captcha-bypass` | CAPTCHA bypass | BugHunter |
-| `hunt-forgot-password` | Password-reset flow flaws | BugHunter |
-| `hunt-mfa-bypass` | MFA bypass | BugHunter |
-| `hunt-saml` | SAML attacks | BugHunter |
-| `hunt-session` | Session management flaws | BugHunter |
+| `shilahunter-jwt` | JWT attacks (alg confusion, kid/jku, tampering) | claude-red |
+| `shilahunter-oauth` | OAuth / OIDC flow abuse | claude-red |
+| `shilahunter-ato` | Account takeover chains | BugHunter |
+| `shilahunter-auth-bypass` | Authentication bypass | BugHunter |
+| `shilahunter-brute-force` | Credential brute-force / rate-limit gaps | BugHunter |
+| `shilahunter-captcha-bypass` | CAPTCHA bypass | BugHunter |
+| `shilahunter-forgot-password` | Password-reset flow flaws | BugHunter |
+| `shilahunter-mfa-bypass` | MFA bypass | BugHunter |
+| `shilahunter-saml` | SAML attacks | BugHunter |
+| `shilahunter-session` | Session management flaws | BugHunter |
 
 ### recon (4)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `offensive-osint` | OSINT tooling and sources | claude-red |
-| `offensive-osint-methodology` | **Upgraded:** 5-stage external-recon pipeline | BugHunter |
-| `hunt-subdomain` | Subdomain enumeration / takeover | BugHunter |
-| `hunt-tls-network` | TLS / network-layer issues | BugHunter |
+| `shilahunter-osint` | OSINT tooling and sources | claude-red |
+| `shilahunter-osint-methodology` | **Upgraded:** 5-stage external-recon pipeline | BugHunter |
+| `shilahunter-subdomain` | Subdomain enumeration / takeover | BugHunter |
+| `shilahunter-tls-network` | TLS / network-layer issues | BugHunter |
 
 ### cloud (4)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `offensive-cloud` | AWS / Azure / GCP attack methodology | claude-red |
-| `hunt-cloud-misconfig` | Cloud misconfiguration | BugHunter |
-| `hunt-k8s` | Kubernetes attack surface | BugHunter |
-| `hunt-cicd` | CI/CD pipeline attacks | BugHunter |
+| `shilahunter-cloud` | AWS / Azure / GCP attack methodology | claude-red |
+| `shilahunter-cloud-misconfig` | Cloud misconfiguration | BugHunter |
+| `shilahunter-k8s` | Kubernetes attack surface | BugHunter |
+| `shilahunter-cicd` | CI/CD pipeline attacks | BugHunter |
 
 ### ai (2)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `hunt-llm-ai` | LLM/AI bugs — prompt injection, tool-use exfil | BugHunter |
-| `hunt-rag-vector` | RAG / vector-store attacks | BugHunter |
+| `shilahunter-llm-ai` | LLM/AI bugs — prompt injection, tool-use exfil | BugHunter |
+| `shilahunter-rag-vector` | RAG / vector-store attacks | BugHunter |
 
 ### framework (5)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `hunt-aspnet` | ASP.NET-specific issues | BugHunter |
-| `hunt-laravel` | Laravel-specific issues | BugHunter |
-| `hunt-nextjs` | Next.js-specific issues | BugHunter |
-| `hunt-nodejs` | Node.js-specific issues | BugHunter |
-| `hunt-springboot` | Spring Boot-specific issues | BugHunter |
+| `shilahunter-aspnet` | ASP.NET-specific issues | BugHunter |
+| `shilahunter-laravel` | Laravel-specific issues | BugHunter |
+| `shilahunter-nextjs` | Next.js-specific issues | BugHunter |
+| `shilahunter-nodejs` | Node.js-specific issues | BugHunter |
+| `shilahunter-springboot` | Spring Boot-specific issues | BugHunter |
 
 ### utility (2)
 | Skill | Focus | Source |
 |-------|-------|--------|
-| `offensive-fast-checking` | Fast triage / quick vulnerability checks | claude-red |
-| `offensive-reporting` | Writing up findings and reports | claude-red |
+| `shilahunter-fast-checking` | Fast triage / quick vulnerability checks | claude-red |
+| `shilahunter-reporting` | Writing up findings and reports | claude-red |
 
 ## Attribution & license
 
 Dual-provenance, **two licenses**:
 
-- `offensive-*` skills → [SnailSploit/claude-red](https://github.com/SnailSploit/claude-red), **MIT** (see [`LICENSE`](./LICENSE)).
-- `hunt-*` skills + upgraded `offensive-osint-methodology` → [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) by Sachin Sharma, **CC BY 4.0**.
+- Skills sourced from [SnailSploit/claude-red](https://github.com/SnailSploit/claude-red) — **MIT** (see [`LICENSE`](./LICENSE)); listed in [`ATTRIBUTION.md`](./ATTRIBUTION.md).
+- Skills sourced from [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) by Sachin Sharma — **CC BY 4.0**; listed in [`ATTRIBUTION.md`](./ATTRIBUTION.md).
 
 Full details, the list of CC-BY skills, and the changes made are in
 [`ATTRIBUTION.md`](./ATTRIBUTION.md).

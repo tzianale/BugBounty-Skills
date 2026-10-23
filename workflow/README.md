@@ -63,7 +63,7 @@ python3 $B phase return --name acme recon --reason "found new API host"
 python3 $B finding add --name acme --title "IDOR on /api/account" --class idor \
          --sev high --target 'https://api.acme.com/account?id=5' \
          --status candidate --evidence "id=6 returns other user's PII" \
-         --skills offensive-idor
+         --skills shilahunter-idor
 python3 $B finding set  --name acme F001 --status confirmed --poc 'curl ...'
 python3 $B finding list --name acme
 python3 $B status       --name acme
