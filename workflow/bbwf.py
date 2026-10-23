@@ -256,6 +256,30 @@ def cmd_engagements(args):
               f"(confirmed={conf})  scope: in={len(sc.in_scope)} out={len(sc.out_of_scope)}")
 
 
+def cmd_submit(args):
+    import time
+    import templates as T
+    eng = _eng(args)
+    f = eng.get_finding(args.id)
+    if not f:
+        sys.exit(f"error: no finding {args.id}")
+    if f["status"] not in ("confirmed", "reported") and not args.force:
+        sys.exit(f"error: {args.id} is '{f['status']}', not confirmed. "
+                 f"Confirm it first, or pass --force to render anyway.")
+    md = T.render(f, eng.name, platform=args.platform, template=args.template,
+                  date=time.strftime("%Y-%m-%d"))
+    if args.out:
+        out = args.out
+    else:
+        subdir = os.path.join(eng.dir, "submissions")
+        os.makedirs(subdir, exist_ok=True)
+        out = os.path.join(subdir, f"{args.id}.md")
+    with open(out, "w", encoding="utf-8") as fh:
+        fh.write(md)
+    print(md)
+    print(f"\n(written to {out} — review/fill any _(stub)_ sections before uploading)", file=sys.stderr)
+
+
 def cmd_dashboard(args):
     import dashboard as DB
     html = DB.render(args.base)
@@ -362,6 +386,16 @@ def build_parser():
 
     q = sub.add_parser("status", help="engagement overview"); q.add_argument("--name", required=True)
     q.set_defaults(fn=cmd_status)
+
+    q = sub.add_parser("submit", help="render one finding into a submission-ready write-up")
+    q.add_argument("--name", required=True)
+    q.add_argument("id", help="finding id, e.g. F001")
+    q.add_argument("--platform", default="generic",
+                   choices=["generic", "hackerone", "bugcrowd", "intigriti"])
+    q.add_argument("--template", help="class name, or path to a custom .md template")
+    q.add_argument("--out", help="output path (default <base>/<name>/submissions/<id>.md)")
+    q.add_argument("--force", action="store_true", help="render even if not confirmed")
+    q.set_defaults(fn=cmd_submit)
 
     q = sub.add_parser("dashboard", help="render a local HTML findings overview (all engagements)")
     q.add_argument("--out", help="output path (default <base>/dashboard.html)")

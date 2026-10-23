@@ -96,6 +96,31 @@ and `#` comments ignored) — handy for pasting a program's published scope.
 program has it in scope (deny-wins still applies per program), so it's safe to use
 as a "can I touch this at all?" gate when you're in several programs at once.
 
+## Submission templates (upload-ready write-ups)
+
+Render one confirmed finding into a submission-ready Markdown write-up to paste
+into the program's platform.
+
+```bash
+python3 workflow/bbwf.py submit --name acme F001                      # generic
+python3 workflow/bbwf.py submit --name acme F001 --platform hackerone # CVSS severity line
+python3 workflow/bbwf.py submit --name acme F001 --platform bugcrowd  # VRT priority line
+python3 workflow/bbwf.py submit --name acme F001 --template path/to/custom.md
+```
+
+It merges the finding's data (title, target, param, steps, evidence) with
+**per-class defaults** (CWE, impact, remediation, references) from
+`templates/classes.json`, using the master layout in `templates/submission.md`.
+Any section the finding/class doesn't fill becomes a visible `_(stub)_` so you
+never submit a blank — fill those in, then upload. `--platform` only changes the
+severity convention (HackerOne CVSS / Bugcrowd VRT / Intigriti / generic).
+
+Only `confirmed`/`reported` findings render (pass `--force` to override). Output
+goes to `<base>/<name>/submissions/<id>.md` (outside this repo).
+
+**The templates are yours to edit** — tune `templates/submission.md` and add/adjust
+classes in `templates/classes.json` to match your voice and the programs you hit.
+
 ## Findings dashboard (local HTML)
 
 A read-only visual overview of what you found, where — across all engagements.

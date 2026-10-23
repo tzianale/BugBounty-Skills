@@ -1,0 +1,64 @@
+{
+  "_comment": "Per-class defaults merged into submission.md. Edit freely. Keys match the --class value on a finding. 'references' is a list. Anything a finding doesn't override falls back to a fill-in stub.",
+
+  "idor": {
+    "cwe": "CWE-639: Authorization Bypass Through User-Controlled Key",
+    "impact": "An authenticated user can read/modify another user's data by changing an object identifier, with no authorization check enforced server-side. This exposes other users' PII/records and can enable account takeover or data tampering at scale.",
+    "remediation": "Enforce object-level authorization on the server for every request: verify the authenticated principal owns or may access the referenced object. Do not rely on unguessable IDs; use indirect references or per-user scoping.",
+    "references": ["OWASP API Security Top 10 — API1:2023 Broken Object Level Authorization", "CWE-639"]
+  },
+  "xss": {
+    "cwe": "CWE-79: Improper Neutralization of Input During Web Page Generation",
+    "impact": "Attacker-controlled script executes in a victim's browser in the application's origin, enabling session/token theft, actions on the victim's behalf, and credential phishing within the trusted domain.",
+    "remediation": "Context-aware output encoding on all untrusted data; a strict Content-Security-Policy; framework auto-escaping; HttpOnly on session cookies. For DOM XSS, avoid unsafe sinks (innerHTML, eval) and use safe APIs.",
+    "references": ["OWASP XSS Prevention Cheat Sheet", "CWE-79"]
+  },
+  "ssrf": {
+    "cwe": "CWE-918: Server-Side Request Forgery",
+    "impact": "The server can be coerced into making requests to attacker-chosen destinations, reaching internal services and cloud metadata endpoints (e.g. 169.254.169.254) — often leading to credential theft and internal network pivoting.",
+    "remediation": "Allowlist outbound destinations; resolve and validate hostnames/IPs (block link-local, private, and metadata ranges) after DNS resolution; disable unneeded URL schemes/redirects; require authentication on internal services.",
+    "references": ["OWASP SSRF Prevention Cheat Sheet", "CWE-918"]
+  },
+  "sqli": {
+    "cwe": "CWE-89: Improper Neutralization of Special Elements used in an SQL Command",
+    "impact": "Attacker-controlled input alters SQL queries, allowing read/modification of arbitrary database contents, authentication bypass, and in some configurations command execution on the database host.",
+    "remediation": "Use parameterized queries / prepared statements everywhere; apply least-privilege DB accounts; validate and constrain input; avoid building SQL by string concatenation (including in ORMs' raw fragments).",
+    "references": ["OWASP SQL Injection Prevention Cheat Sheet", "CWE-89"]
+  },
+  "ssti": {
+    "cwe": "CWE-1336: Improper Neutralization of Special Elements Used in a Template Engine",
+    "impact": "User input evaluated by a server-side template engine allows template expression injection, commonly escalating to remote code execution on the application server.",
+    "remediation": "Never pass user input into template source; use logic-less or sandboxed templates; pass untrusted data only as rendered context variables, not as template text.",
+    "references": ["PortSwigger — Server-side template injection", "CWE-1336"]
+  },
+  "rce": {
+    "cwe": "CWE-94: Improper Control of Generation of Code",
+    "impact": "Arbitrary command/code execution on the server, giving full control of the application host, its data, and a pivot point into internal infrastructure.",
+    "remediation": "Eliminate the unsafe sink (shell/exec/deserialization/eval of untrusted input); use safe APIs and allowlists; patch the affected component; run with least privilege and strong egress controls.",
+    "references": ["CWE-94", "CWE-78"]
+  },
+  "csrf": {
+    "cwe": "CWE-352: Cross-Site Request Forgery",
+    "impact": "A victim's authenticated session is used to perform state-changing actions they did not intend, from an attacker-controlled page.",
+    "remediation": "Anti-CSRF tokens on state-changing requests; SameSite cookies; verify Origin/Referer; require re-authentication for sensitive actions.",
+    "references": ["OWASP CSRF Prevention Cheat Sheet", "CWE-352"]
+  },
+  "auth-bypass": {
+    "cwe": "CWE-287: Improper Authentication",
+    "impact": "An attacker gains authenticated access, or access to another account, without valid credentials — a direct breach of the authentication boundary.",
+    "remediation": "Enforce authentication checks server-side on every protected route; fix the specific bypass (logic flaw, token handling, forced browsing); add tests covering the bypass path.",
+    "references": ["OWASP Authentication Cheat Sheet", "CWE-287"]
+  },
+  "oauth": {
+    "cwe": "CWE-287: Improper Authentication (OAuth/OIDC flow)",
+    "impact": "Flaws in the OAuth/OIDC flow (redirect_uri handling, state/PKCE, token leakage) enable authorization-code/token theft and account takeover.",
+    "remediation": "Strict exact-match redirect_uri allowlisting; enforce state and PKCE; never expose tokens in URLs/Referer; validate token audience and issuer.",
+    "references": ["RFC 6749 / 6819", "OAuth 2.0 Security Best Current Practice (RFC 9700)"]
+  },
+  "ssrf-blind": {
+    "cwe": "CWE-918: Server-Side Request Forgery (blind)",
+    "impact": "Blind SSRF confirmed via out-of-band interaction; reachability of internal/attacker-chosen hosts without a direct response channel.",
+    "remediation": "As SSRF: allowlist destinations, validate resolved IPs, block metadata/internal ranges, restrict schemes and redirects.",
+    "references": ["OWASP SSRF Prevention Cheat Sheet", "CWE-918"]
+  }
+}
