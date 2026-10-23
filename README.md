@@ -1,4 +1,4 @@
-# bugbounty-skills
+# shila-hunt-bugs
 
 A curated, private collection of **64 bug-bounty-focused Claude skills**, drawn
 from two upstream projects and organized as `Skills/<category>/<name>/SKILL.md`:
