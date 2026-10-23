@@ -72,6 +72,30 @@ python3 $B status       --name acme
 python3 $B report --name acme        # prints + writes <base>/acme/report.md
 ```
 
+## Multiple programs / scopes
+
+Each program is its own **engagement** (`--name`), fully isolated — its own scope,
+findings, phase, and directory. Run as many in parallel as you like.
+
+```bash
+# one engagement per program; bulk-import a published scope list from a file
+python3 workflow/bbwf.py init --name acme   --in-file acme-scope.txt --out admin.acme.com
+python3 workflow/bbwf.py init --name globex --in '*.globex.io' --in globex.com
+
+# see everything at a glance
+python3 workflow/bbwf.py engagements
+
+# cross-program lookup: found a host — which program is it in-scope for?
+python3 workflow/bbwf.py scope which foo.acme.io      # -> IN SCOPE for 'acme'
+python3 workflow/bbwf.py scope which app.globex.io    # -> IN SCOPE for 'globex'
+```
+
+`--in-file` / `--out-file` / `--seed-file` take one pattern per line (blank lines
+and `#` comments ignored) — handy for pasting a program's published scope.
+`scope which` checks a host against **every** engagement and exits 0 only if some
+program has it in scope (deny-wins still applies per program), so it's safe to use
+as a "can I touch this at all?" gate when you're in several programs at once.
+
 ## Scope pattern forms
 
 | Pattern | Matches |

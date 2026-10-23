@@ -46,16 +46,47 @@ def _eng(args) -> Engagement:
     return Engagement(args.base, args.name)
 
 
+def _read_patterns(path: str):
+    """One pattern per line; blank lines and # comments ignored."""
+    out = []
+    with open(os.path.expanduser(path), encoding="utf-8") as fh:
+        for line in fh:
+            s = line.strip()
+            if s and not s.startswith("#"):
+                out.append(s)
+    return out
+
+
+def _list_engagements(base: str):
+    base = os.path.expanduser(base)
+    names = []
+    if os.path.isdir(base):
+        for n in sorted(os.listdir(base)):
+            if os.path.isfile(os.path.join(base, n, "state.json")):
+                names.append(n)
+    return names
+
+
+def _apply_scope_edits(sc, args) -> bool:
+    """Add in/out/seed values from flags AND their --*-file variants."""
+    changed = False
+    buckets = [("in_scope", args.in_scope, getattr(args, "in_file", None)),
+               ("out_of_scope", args.out_scope, getattr(args, "out_file", None)),
+               ("seeds", args.seed, getattr(args, "seed_file", None))]
+    for bucket, values, path in buckets:
+        for v in (values or []):
+            changed |= sc.add(bucket, v)
+        if path:
+            for v in _read_patterns(path):
+                changed |= sc.add(bucket, v)
+    return changed
+
+
 # ---------------- commands ----------------
 def cmd_init(args):
     eng = Engagement(args.base, args.name)
     sc = eng.scope
-    for v in args.in_scope or []:
-        sc.add("in_scope", v)
-    for v in args.out_scope or []:
-        sc.add("out_of_scope", v)
-    for v in args.seed or []:
-        sc.add("seeds", v)
+    _apply_scope_edits(sc, args)
     eng.set_scope(sc)
     eng.log(f"init engagement '{args.name}'")
     print(f"✓ engagement '{args.name}' at {eng.dir}")
@@ -70,6 +101,22 @@ def _print_scope(sc: Scope):
 
 
 def cmd_scope(args):
+    # 'which' is cross-engagement — it needs no --name, so handle it first.
+    if args.scope_cmd == "which":
+        host = host_of(args.target)
+        hits = []
+        for name in _list_engagements(args.base):
+            ok, reason = Engagement(args.base, name).scope.check(args.target)
+            if ok:
+                hits.append((name, reason))
+        print(f"host: {host}")
+        if hits:
+            for name, reason in hits:
+                print(f"  IN SCOPE for '{name}'  —  {reason}")
+        else:
+            print("  not in scope for any engagement (default-deny)")
+        sys.exit(0 if hits else 2)
+
     eng = _eng(args)
     sc = eng.scope
     if args.scope_cmd == "list":
@@ -81,13 +128,7 @@ def cmd_scope(args):
         print(f"[{mark}] {host}  —  {reason}")
         sys.exit(0 if ok else 2)
     elif args.scope_cmd == "add":
-        changed = False
-        for v in args.in_scope or []:
-            changed |= sc.add("in_scope", v)
-        for v in args.out_scope or []:
-            changed |= sc.add("out_of_scope", v)
-        for v in args.seed or []:
-            changed |= sc.add("seeds", v)
+        changed = _apply_scope_edits(sc, args)
         eng.set_scope(sc)
         print("✓ updated" if changed else "(no change)")
         _print_scope(sc)
@@ -200,6 +241,21 @@ def cmd_finding(args):
         print(f"✓ updated {args.id}")
 
 
+def cmd_engagements(args):
+    names = _list_engagements(args.base)
+    if not names:
+        print(f"(no engagements under {os.path.expanduser(args.base)})")
+        return
+    print(f"engagements under {os.path.expanduser(args.base)}:")
+    for name in names:
+        eng = Engagement(args.base, name)
+        s = eng.summary()
+        sc = eng.scope
+        conf = s["by_status"].get("confirmed", 0)
+        print(f"  {name:<20} phase={s['phase']:<8} findings={s['findings']:<3} "
+              f"(confirmed={conf})  scope: in={len(sc.in_scope)} out={len(sc.out_of_scope)}")
+
+
 def cmd_status(args):
     eng = _eng(args)
     s = eng.summary()
@@ -230,20 +286,35 @@ def build_parser():
     p.add_argument("--in", dest="in_scope", action="append", help="in-scope pattern (repeatable)")
     p.add_argument("--out", dest="out_scope", action="append", help="out-of-scope pattern (repeatable)")
     p.add_argument("--seed", action="append", help="seed URL (repeatable)")
+    p.add_argument("--in-file", dest="in_file", help="file of in-scope patterns (one per line)")
+    p.add_argument("--out-file", dest="out_file", help="file of out-of-scope patterns (one per line)")
+    p.add_argument("--seed-file", dest="seed_file", help="file of seed URLs (one per line)")
     p.set_defaults(fn=cmd_init)
 
     p = sub.add_parser("scope", help="scope manager")
     sc = p.add_subparsers(dest="scope_cmd", required=True)
-    for name in ("add", "rm"):
-        q = sc.add_parser(name, help=f"{name} scope entries")
-        q.add_argument("--name", required=True)
-        q.add_argument("--in", dest="in_scope", action="append")
-        q.add_argument("--out", dest="out_scope", action="append")
-        q.add_argument("--seed", action="append")
+    q = sc.add_parser("add", help="add scope entries")
+    q.add_argument("--name", required=True)
+    q.add_argument("--in", dest="in_scope", action="append")
+    q.add_argument("--out", dest="out_scope", action="append")
+    q.add_argument("--seed", action="append")
+    q.add_argument("--in-file", dest="in_file", help="file of in-scope patterns (one per line)")
+    q.add_argument("--out-file", dest="out_file", help="file of out-of-scope patterns (one per line)")
+    q.add_argument("--seed-file", dest="seed_file", help="file of seed URLs (one per line)")
+    q = sc.add_parser("rm", help="remove scope entries")
+    q.add_argument("--name", required=True)
+    q.add_argument("--in", dest="in_scope", action="append")
+    q.add_argument("--out", dest="out_scope", action="append")
+    q.add_argument("--seed", action="append")
     q = sc.add_parser("list", help="show scope"); q.add_argument("--name", required=True)
-    q = sc.add_parser("check", help="is a host/URL in scope?")
+    q = sc.add_parser("check", help="is a host/URL in scope? (one engagement)")
     q.add_argument("--name", required=True); q.add_argument("target")
+    q = sc.add_parser("which", help="which engagement(s) is a host/URL in scope for?")
+    q.add_argument("target")
     p.set_defaults(fn=cmd_scope)
+
+    q = sub.add_parser("engagements", help="list all engagements")
+    q.set_defaults(fn=cmd_engagements)
 
     p = sub.add_parser("plan", help="print the phase plan")
     p.add_argument("phase", nargs="?", help="a single phase key (optional)")
