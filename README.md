@@ -24,9 +24,20 @@ the two sets are under **different licenses**.
 ./install.sh
 ```
 
-Copies every `Skills/<category>/<name>/` folder into `~/.claude/skills/`. Skills
-auto-load by topic — describe what you're testing in plain English. Re-run any
-time to refresh. Honors `CLAUDE_SKILLS_DIR` to install elsewhere.
+This does two things:
+1. copies every `Skills/<category>/<name>/` folder into `~/.claude/skills/` — the
+   skills then auto-load by topic (describe what you're testing in plain English);
+2. links the **`shila`** workflow launcher onto your PATH (`~/.local/bin` by
+   default) so you can run `shila hunt …`, `shila show dashboard`, etc.
+
+Re-run any time to refresh (idempotent). Flags/env: `--no-shila` (skills only),
+`CLAUDE_SKILLS_DIR=/path` (custom skills dir), `SHILA_BIN_DIR=/path` (custom
+launcher dir). `shila` needs `python3` at runtime.
+
+```bash
+shila help
+shila hunt acme acme.com      # start a session, scope it, show the recon plan
+```
 
 ## Workflow toolkit (`workflow/`)
 
