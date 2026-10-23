@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# shila — launcher for the bug-bounty workflow front-end.
+# Symlink this onto your PATH, e.g.:  ln -s "$PWD/shila" ~/.local/bin/shila
+here="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+exec python3 "$here/shila.py" "$@"

@@ -1,5 +1,38 @@
 # bbwf — bug-bounty workflow toolkit
 
+## `shila` — the friendly front-end
+
+`shila` wraps `bbwf.py` with natural verbs so you can drive the whole workflow
+quickly. Put it on your PATH:
+
+```bash
+ln -s "$PWD/workflow/shila" ~/.local/bin/shila   # or anywhere on $PATH
+```
+
+Then:
+
+```bash
+shila hunt acme acme.com        # start a session (engagement) + add scope + show recon plan
+shila recon acme                # run scope-gated recon
+shila scope acme https://api.acme.com   # is this host in scope?
+shila which app.acme.com        # which engagement is this host in scope for?
+shila plan                      # the phase plan (or: shila plan recon / shila plan acme)
+shila next acme                 # advance a phase    shila back acme recon "new asset"
+shila found acme --title "IDOR" --class idor --sev high --target https://api.acme.com/a?id=5 --skills shilahunter-idor
+shila confirm acme F001 high    # mark confirmed
+shila findings acme             # list findings      shila show acme   # status
+shila show dashboard            # build + open the findings dashboard
+shila list                      # all engagements
+shila report acme               # render report.md
+shila submit acme F001 hackerone   # upload-ready write-up
+shila help                      # full verb list
+```
+
+It adds no behavior of its own — every verb translates to a `bbwf.py` call, so
+the safety model is identical (operator-led, scope-gated). `--base <dir>` works
+on any verb.
+
+
 An **operator-driven, phase-based** engagement runner. Not an autonomous engine:
 it does not test anything or call any model. It does three deterministic,
 offline things:
