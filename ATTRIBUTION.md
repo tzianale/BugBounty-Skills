@@ -54,3 +54,13 @@ hunt-forgot-password, hunt-mfa-bypass, hunt-saml, hunt-session
 hunt-springboot
 
 **cloud:** hunt-cloud-misconfig, hunt-k8s, hunt-cicd
+
+## 3. workflow/ toolkit — original, with design credit
+
+The `workflow/` toolkit (`bbwf.py`, `scope.py`, `phases.py`, `state.py`) is
+original work for this repository. Its **scope model** (deny-wins, default-deny;
+apex / `*.wildcard` / exact-host / CIDR / `re:` regex matching) is a clean
+reimplementation of the approach in elementalsouls/Claude-BugHunter's engine
+(`engine/scope.py`), whose **code** is MIT-licensed (distinct from that
+project's CC BY 4.0 skill content). No code was copied verbatim; the design is
+credited here under MIT.

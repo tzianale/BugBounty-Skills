@@ -26,6 +26,25 @@ Copies every `Skills/<category>/<name>/` folder into `~/.claude/skills/`. Skills
 auto-load by topic — describe what you're testing in plain English. Re-run any
 time to refresh. Honors `CLAUDE_SKILLS_DIR` to install elsewhere.
 
+## Workflow toolkit (`workflow/`)
+
+Beyond the skills, `workflow/bbwf.py` is a small, dependency-free, **operator-driven**
+engagement runner — a phase plan + a findings store + a scope manager. It does
+**not** test anything or call a model; you drive the phases and the skills above
+do the hunting. See [`workflow/README.md`](./workflow/README.md).
+
+```bash
+python3 workflow/bbwf.py init  --name acme --in acme.com --out admin.acme.com --seed https://acme.com
+python3 workflow/bbwf.py scope check --name acme https://api.acme.com   # deny-wins, default-deny
+python3 workflow/bbwf.py plan                                           # the phase plan
+python3 workflow/bbwf.py finding add --name acme --title ... --class idor --sev high --target ...
+python3 workflow/bbwf.py report --name acme
+```
+
+Phases: `scope → recon → map → hunt → triage → report`, with return edges back
+to earlier phases. Engagement data is stored under `~/.bb-engagements/` (outside
+this repo), so live findings are never committed.
+
 ## Skills by category
 
 ### web (30)
