@@ -125,6 +125,11 @@ engineer around. That check is part of doing this work properly.
 - Track the engagement with `workflow/bbwf.py` (phases: scope → recon → map →
   hunt → triage → report, with return edges). Findings live under
   `~/.bb-engagements/` (outside this repo) and are never committed.
+- `bbwf.py recon` runs standard recon tools (subfinder/httpx/gau/katana/crt.sh)
+  when the operator invokes it. It is scope-gated **discovery only** — every host
+  is filtered through the engagement scope before any active request, and it never
+  tests for or exploits vulnerabilities. This is operator-initiated reconnaissance,
+  not the autonomous hunt/exploit loop that is excluded above.
 - Ask for methodology and safe PoC, phase by phase, rather than turnkey
   end-to-end exploitation — it's safer, keeps the operator in the lead, and
   produces better reports.

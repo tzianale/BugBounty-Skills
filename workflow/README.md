@@ -72,6 +72,35 @@ python3 $B status       --name acme
 python3 $B report --name acme        # prints + writes <base>/acme/report.md
 ```
 
+## Recon (runs tools for you — scope-gated, discovery only)
+
+`bbwf.py recon` runs your installed recon tools and records the surface it finds.
+It is **reconnaissance only** — enumeration, liveness, tech fingerprint, endpoint
+and parameter mining. It does not test for, probe, or exploit vulnerabilities.
+
+```bash
+python3 workflow/bbwf.py recon --name acme              # passive enum + active httpx on in-scope hosts
+python3 workflow/bbwf.py recon --name acme --crawl      # also active-crawl live hosts (katana)
+python3 workflow/bbwf.py recon --name acme --no-active  # passive only (no requests sent to targets)
+python3 workflow/bbwf.py recon --name acme --dry-run    # print the exact commands; execute nothing
+```
+
+**Scope is enforced before any active request.** Discovered hosts are filtered
+through the engagement scope; out-of-scope hosts are dropped and never probed.
+Passive sources (crt.sh, gau) query third-party data about a domain; active tools
+(httpx, katana) only ever point at in-scope hosts.
+
+Tools are optional and auto-detected; missing ones are skipped with a note:
+
+| Step | Tools |
+|---|---|
+| passive subdomain enum | `subfinder`, `assetfinder`, `crt.sh` (via `curl`) |
+| liveness + tech | `httpx` |
+| endpoint/param mining | `gau` (passive history), `katana` (active crawl) |
+
+Results are recorded on the engagement (`targets`, `endpoints`) and summarized.
+You then decide what to hunt — recon maps the surface, it does not test it.
+
 ## Multiple programs / scopes
 
 Each program is its own **engagement** (`--name`), fully isolated — its own scope,

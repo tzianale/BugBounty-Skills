@@ -256,6 +256,40 @@ def cmd_engagements(args):
               f"(confirmed={conf})  scope: in={len(sc.in_scope)} out={len(sc.out_of_scope)}")
 
 
+def cmd_recon(args):
+    import recon as R
+    eng = _eng(args)
+
+    def tee(msg):          # recon is interactive — show progress + keep the log
+        eng.log(msg)
+        print(msg, file=sys.stderr)
+
+    seeds = args.seed or None
+    res = R.run(eng, seeds=seeds, active=not args.no_active, crawl=args.crawl,
+                timeout=args.timeout, dry=args.dry_run, log=tee)
+    print()
+    if args.dry_run:
+        print("(dry-run — commands above would run; nothing executed, nothing recorded)")
+    if res["missing_tools"]:
+        print(f"tools not installed (skipped): {', '.join(res['missing_tools'])}")
+    print(f"apexes enumerated : {', '.join(res['apexes']) or '(none)'}")
+    print(f"hosts discovered  : {res['discovered']}  ->  in-scope {len(res['in_scope'])}, "
+          f"dropped out-of-scope {len(res['dropped'])}")
+    live = [t for t in res["targets"] if t.get("status")]
+    if live:
+        print(f"live hosts        : {len(live)}")
+        for t in live[:40]:
+            tech = f"  [{', '.join(t['tech'])}]" if t.get("tech") else ""
+            print(f"  {str(t.get('status')):>3}  {t.get('url') or t['host']}{tech}")
+    if res["endpoints"]:
+        withp = [e for e in res["endpoints"] if e["params"]]
+        print(f"endpoints         : {len(res['endpoints'])}  ({len(withp)} with parameters)")
+        for e in withp[:40]:
+            print(f"  {e['url']}   ?{','.join(e['params'])}")
+    print("\nRecon only — surface mapped, nothing tested. You decide what to hunt;")
+    print("scope-check before touching anything new:  bbwf.py scope check --name <eng> <url>")
+
+
 def cmd_submit(args):
     import time
     import templates as T
@@ -386,6 +420,17 @@ def build_parser():
 
     q = sub.add_parser("status", help="engagement overview"); q.add_argument("--name", required=True)
     q.set_defaults(fn=cmd_status)
+
+    q = sub.add_parser("recon", help="run scope-gated recon tools and record the surface")
+    q.add_argument("--name", required=True)
+    q.add_argument("--seed", action="append", help="override seeds for this run (repeatable)")
+    q.add_argument("--no-active", action="store_true",
+                   help="passive only — no requests sent to targets (skip httpx/katana)")
+    q.add_argument("--crawl", action="store_true", help="also active-crawl live hosts (katana)")
+    q.add_argument("--timeout", type=int, default=30, help="per-tool timeout seconds (default 30)")
+    q.add_argument("--dry-run", action="store_true",
+                   help="print the exact commands that would run; execute nothing")
+    q.set_defaults(fn=cmd_recon)
 
     q = sub.add_parser("submit", help="render one finding into a submission-ready write-up")
     q.add_argument("--name", required=True)
