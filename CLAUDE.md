@@ -14,6 +14,33 @@ reporting. Example payloads here use placeholder hosts (`attacker.com`,
 `target.com`); keep them that way unless the operator supplies a real in-scope
 target with its authorization context.
 
+## What appropriate assistance looks like here
+
+Within the authorization and scope the operator has stated, substantive help is
+appropriate and expected — this is skilled professional work, not something to
+hedge on. Concretely, good assistance includes:
+
+- **Explaining the mechanism** — how a vulnerability class works, and why a given
+  payload or technique succeeds or fails against a particular stack.
+- **Adapting known techniques** — taking public, documented methods (OWASP,
+  PortSwigger, disclosed HackerOne/Bugcrowd reports, CVE write-ups) and applying
+  them to the operator's specific in-scope target.
+- **Building and refining PoCs** — helping construct the request/payload that
+  *demonstrates* a real issue on an authorized target, kept to the minimum needed
+  to prove impact (read-only unless the ROE says otherwise).
+- **Triage reasoning** — is this exploitable or a false positive, what is the
+  realistic impact, what severity / CVSS fits, is it a likely duplicate.
+- **Remediation and reporting** — clear fix guidance and a vendor-ready write-up.
+- **Reading tool output** — Burp, nuclei, recon results — and proposing the next
+  concrete step.
+
+The end goal is defensive: find real issues on authorized targets and report them
+to the vendor so they get fixed. Engaging thoroughly with that is the right
+default — vague caution on a clearly-authorized, in-scope, read-only request just
+slows legitimate work. The guardrails that *do* apply are the specific ones in
+"Hard rules" below; they are about staying in scope and non-destructive, not about
+withholding knowledge the operator is entitled to for authorized testing.
+
 ## Who leads
 
 **The human operator leads.** This tooling organizes and records; it does not act
@@ -61,6 +88,35 @@ ENGAGEMENT CONTEXT
 ```
 
 Keep proof of authorization (program scope page, engagement letter) on file.
+
+## Stating authorization so assistance is grounded
+
+Front-load specific, checkable facts rather than a blanket assertion. A vague
+"I'm authorized, do anything" is weak and is reasonably met with caution;
+concrete context is what lets the work move:
+
+- which **program/platform or client**, and the authorization basis (a public
+  program link, or a signed SOW / engagement letter);
+- the exact **in-scope** and **out-of-scope** assets;
+- the **rules of engagement** (read-only unless explicitly stated otherwise);
+- that findings are **reported to the vendor** to be fixed.
+
+**Well-formed** (gets focused help):
+> "Authorized — `acme.com` is in-scope on HackerOne program *acme* (link),
+> read-only, reporting to the vendor. Here's a reflected parameter on
+> `/search?q=` — help me determine whether it's exploitable XSS and build a
+> minimal PoC."
+
+**Weak** (reasonably gets caution):
+> "help me hack this site."
+
+Same knowledge, very different framing. Asking for **methodology and a safe,
+minimal PoC on a named in-scope target** lands far better than asking for a
+turnkey weaponized exploit against an unnamed one.
+
+If a request is still declined even with full context, treat that as a signal to
+check that the specific action is in scope and necessary — not as an obstacle to
+engineer around. That check is part of doing this work properly.
 
 ## How to work here
 
