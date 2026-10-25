@@ -52,6 +52,17 @@ class TestCredStore(unittest.TestCase):
         self.store.add({"id": "a", "host": "h", "username": "u"})
         self.assertEqual(stat.S_IMODE(os.stat(self.path).st_mode), 0o600)
 
+    def test_save_over_preexisting_file_is_still_0600(self):
+        # Pre-create a creds.json with looser permissions, then save again
+        # through the atomic-replace path and confirm it ends up at 0600.
+        with open(self.path, "w") as f:
+            f.write("[]")
+        os.chmod(self.path, 0o644)
+        self.store.add({"id": "a", "host": "h", "username": "u"})
+        self.assertEqual(stat.S_IMODE(os.stat(self.path).st_mode), 0o600)
+        # and no leftover temp file
+        self.assertFalse(os.path.exists(self.path + ".tmp"))
+
     def test_reload_persists(self):
         self.store.add({"id": "a", "host": "h", "username": "u", "secret": "s"})
         reloaded = creds.CredStore(self.path)

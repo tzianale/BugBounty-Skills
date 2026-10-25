@@ -9,8 +9,10 @@ from two upstream projects plus 1 skill written for this repo, organized as
 - **1 skill** written for this repo — `shilahunter-authenticated-session` (shila-hunt)
 
 All skill folders use the `shilahunter-` prefix; the two upstream sets keep
-their original authorship unchanged, and the repo-original skill is covered by
-this repo's own license.
+their original authorship unchanged. The repo-original skill is not derived
+from or covered by either upstream license (MIT/claude-red or CC BY 4.0/
+Claude-BugHunter) — it is © the repository owner and not separately licensed
+in this repo yet.
 
 See [`ATTRIBUTION.md`](./ATTRIBUTION.md) for exact provenance and license terms —
 the two sets are under **different licenses**.

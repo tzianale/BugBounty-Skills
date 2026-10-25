@@ -14,7 +14,8 @@ SECRET = "lpe85cbcnV1e30c"
 
 def run(argv):
     buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
+    err = io.StringIO()
+    with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(err):
         bbwf.main(argv)
     return buf.getvalue()
 

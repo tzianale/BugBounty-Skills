@@ -73,7 +73,9 @@ copied verbatim; the design is credited here under MIT.
 ## 4. Repo-original skills (1 skill)
 
 Written for this repository, not sourced from either upstream project.
-Authored for shila-hunt-bugs; covered by this repo's own license, not MIT or
-CC BY 4.0.
+Authored for shila-hunt-bugs; original to this repo and not derived from or
+covered by either upstream project's license (MIT/claude-red or CC BY 4.0/
+Claude-BugHunter). It is © the repository owner; there is no separate license
+file for it in this repo yet.
 
 **web:** shilahunter-authenticated-session

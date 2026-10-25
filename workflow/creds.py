@@ -53,9 +53,11 @@ class CredStore:
         return removed
 
     def save(self):
-        # Create with 0600 so the secret is never briefly world-readable,
-        # then chmod to cover a pre-existing file with looser permissions.
-        fd = os.open(self.path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        # Write to a temp file in the same directory at 0600 (so the secret
+        # is never briefly world-readable), then atomically replace the real
+        # file. os.replace preserves the temp file's mode on the destination.
+        tmp = self.path + ".tmp"
+        fd = os.open(tmp, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
         with os.fdopen(fd, "w") as f:
             json.dump(self._accounts, f, indent=2)
-        os.chmod(self.path, 0o600)
+        os.replace(tmp, self.path)

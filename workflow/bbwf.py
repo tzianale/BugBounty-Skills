@@ -346,7 +346,7 @@ def cmd_creds(args):
     if args.creds_cmd == "add":
         if not eng.scope.in_scope_host(args.host):
             print(f"✗ OUT-OF-SCOPE: '{args.host}' is not in scope for '{args.name}' "
-                  "— refusing to store credentials for it.")
+                  "— refusing to store credentials for it.", file=sys.stderr)
             sys.exit(2)
         secret = sys.stdin.read().strip() if args.secret_stdin else (args.secret or "")
         account = {"id": args.id, "host": args.host, "username": args.user,
@@ -355,7 +355,7 @@ def cmd_creds(args):
         try:
             store.add(account)
         except ValueError as e:
-            print(f"error: {e}")
+            print(f"error: {e}", file=sys.stderr)
             sys.exit(2)
         eng.log(f"creds add id={args.id} host={args.host}")
         print(f"✓ stored '{args.id}' ({args.user}@{args.host}) secret={mask_secret(secret)}")
@@ -369,7 +369,7 @@ def cmd_creds(args):
     elif args.creds_cmd == "get":
         a = store.get(args.id)
         if a is None:
-            print(f"error: no credential with id '{args.id}'")
+            print(f"error: no credential with id '{args.id}'", file=sys.stderr)
             sys.exit(2)
         key = {"user": "username", "host": "host", "secret": "secret"}[args.field]
         print(a[key])

@@ -92,11 +92,12 @@ read-only step already showed. Record it as a **candidate**, not a finding:
 ```bash
 python3 workflow/bbwf.py finding add --name <eng> --status candidate \
   --title "<short description>" \
+  --class idor --skills shilahunter-idor \
   --evidence "<sanitized request/response — no secrets, no session tokens>"
 ```
 
 Name the applicable vulnerability-class skill in the finding (e.g.
-`shilahunter-idor`, `shilahunter-business-logic`, `shilahunter-access-control`)
+`shilahunter-idor`, `shilahunter-business-logic`, `shilahunter-auth-bypass`)
 so the operator knows which methodology to reproduce it with, then hand it off.
 A flag is a lead, not a finding, and not permission to escalate.
 
@@ -146,7 +147,7 @@ it, exactly as in step 3.
    summary, log each endpoint/param/object-ref found.
 5. `GET /api/orders/1042` returns someone else's order when the ID is
    decremented → **STOP**. File it:
-   `python3 workflow/bbwf.py finding add --name acme-eng --status candidate --title "Order IDOR via sequential order id" --evidence "GET /api/orders/1042 as acme-1 returns a different account's order; sanitized response body attached, no cookie included"`
+   `python3 workflow/bbwf.py finding add --name acme-eng --status candidate --title "Order IDOR via sequential order id" --class idor --skills shilahunter-idor --evidence "GET /api/orders/1042 as acme-1 returns a different account's order; sanitized response body attached, no cookie included"`
    referencing `shilahunter-idor`. Hand to the operator.
 
 ## Instructions for Claude
