@@ -34,6 +34,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import phases as P            # noqa: E402
+from creds import CredStore, mask_secret  # noqa: E402
 from scope import Scope, host_of  # noqa: E402
 from state import Engagement, SEVERITIES, STATUSES  # noqa: E402
 
@@ -339,6 +340,47 @@ def cmd_status(args):
     _print_scope(eng.scope)
 
 
+def cmd_creds(args):
+    eng = _eng(args)
+    store = CredStore(os.path.join(eng.dir, "creds.json"))
+    if args.creds_cmd == "add":
+        if not eng.scope.in_scope_host(args.host):
+            print(f"✗ OUT-OF-SCOPE: '{args.host}' is not in scope for '{args.name}' "
+                  "— refusing to store credentials for it.")
+            sys.exit(2)
+        secret = sys.stdin.read().strip() if args.secret_stdin else (args.secret or "")
+        account = {"id": args.id, "host": args.host, "username": args.user,
+                   "secret": secret, "label": args.label or "", "note": args.note or "",
+                   "manual_only": bool(args.manual_only)}
+        try:
+            store.add(account)
+        except ValueError as e:
+            print(f"error: {e}")
+            sys.exit(2)
+        eng.log(f"creds add id={args.id} host={args.host}")
+        print(f"✓ stored '{args.id}' ({args.user}@{args.host}) secret={mask_secret(secret)}")
+    elif args.creds_cmd == "list":
+        accounts = store.accounts()
+        if not accounts:
+            print("(no credentials stored)")
+        for a in accounts:
+            print(f"{a['id']}  host={a['host']}  user={a['username']}  "
+                  f"manual_only={a['manual_only']}  secret={mask_secret(a['secret'])}")
+    elif args.creds_cmd == "get":
+        a = store.get(args.id)
+        if a is None:
+            print(f"error: no credential with id '{args.id}'")
+            sys.exit(2)
+        key = {"user": "username", "host": "host", "secret": "secret"}[args.field]
+        print(a[key])
+    elif args.creds_cmd == "rm":
+        if store.remove(args.id):
+            eng.log(f"creds rm id={args.id}")
+            print("✓ removed")
+        else:
+            print("(no such id)")
+
+
 def cmd_report(args):
     eng = _eng(args)
     report = eng.render_report()
@@ -384,6 +426,29 @@ def build_parser():
     q = sc.add_parser("which", help="which engagement(s) is a host/URL in scope for?")
     q.add_argument("target")
     p.set_defaults(fn=cmd_scope)
+
+    p = sub.add_parser("creds", help="credential store (scope-gated, secrets masked)")
+    cr = p.add_subparsers(dest="creds_cmd", required=True)
+    q = cr.add_parser("add", help="store a credential for an in-scope host")
+    q.add_argument("--name", required=True)
+    q.add_argument("--id", required=True)
+    q.add_argument("--host", required=True)
+    q.add_argument("--user", required=True)
+    q.add_argument("--secret", help="secret value (prefer --secret-stdin)")
+    q.add_argument("--secret-stdin", action="store_true", help="read the secret from stdin")
+    q.add_argument("--label")
+    q.add_argument("--note")
+    q.add_argument("--manual-only", action="store_true")
+    q = cr.add_parser("list", help="list credentials (secrets masked)")
+    q.add_argument("--name", required=True)
+    q = cr.add_parser("get", help="print one field of a credential (default: secret)")
+    q.add_argument("--name", required=True)
+    q.add_argument("id")
+    q.add_argument("--field", choices=["user", "host", "secret"], default="secret")
+    q = cr.add_parser("rm", help="remove a credential")
+    q.add_argument("--name", required=True)
+    q.add_argument("id")
+    p.set_defaults(fn=cmd_creds)
 
     q = sub.add_parser("engagements", help="list all engagements")
     q.set_defaults(fn=cmd_engagements)

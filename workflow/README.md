@@ -201,6 +201,25 @@ PRIVACY: the file contains your findings (targets, evidence, PoCs). It is writte
 under the engagements base (`~/.bb-engagements/`, outside this repo) and must NOT
 be committed or shared. Regenerate it for a fresh snapshot.
 
+## Credential store
+
+Per-engagement test accounts live in `creds.json` under
+`~/.bb-engagements/<name>/` (mode `0600`, outside this repo, never committed).
+
+```bash
+bbwf.py creds add  --name acme --id s1 --host my.acme.com --user me@example.com --secret-stdin
+bbwf.py creds list --name acme                 # secrets masked: lpe****(len=15)
+bbwf.py creds get  --name acme s1 --field secret   # user | host | secret (default secret)
+bbwf.py creds rm   --name acme s1
+```
+
+- `add` is **scope-gated**: a host not in the engagement scope is refused (exit 2)
+  and nothing is written.
+- Prefer `--secret-stdin` over `--secret` so the value stays out of shell history.
+  Optional flags: `--label`, `--note`, `--manual-only`.
+- `list` and the `add` confirmation only ever show the masked secret; `get` is the
+  only command that prints cleartext, and only the field you ask for.
+
 ## Scope pattern forms
 
 | Pattern | Matches |
