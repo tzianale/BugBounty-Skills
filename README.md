@@ -1,6 +1,6 @@
 # shila-hunt-bugs
 
-A curated, private collection of **64 bug-bounty-focused Claude skills**, drawn
+A curated, private collection of **65 bug-bounty-focused Claude skills**, drawn
 from two upstream projects and organized as `Skills/<category>/<name>/SKILL.md`:
 
 - **24 skills** from [SnailSploit/claude-red](https://github.com/SnailSploit/claude-red) — MIT
@@ -60,7 +60,7 @@ this repo), so live findings are never committed.
 
 ## Skills by category
 
-### web (30)
+### web (31)
 | Skill | Focus | Source |
 |-------|-------|--------|
 | `shilahunter-business-logic` | Business-logic flaws and workflow abuse | claude-red |
@@ -93,6 +93,7 @@ this repo), so live findings are never committed.
 | `shilahunter-websocket` | WebSocket security testing | BugHunter |
 | `shilahunter-exceptional-conditions` | Verbose errors / fail-open info disclosure | BugHunter |
 | `shilahunter-misc` | Misc web classes (CRLF, invite/verif bypass, …) | BugHunter |
+| `shilahunter-authenticated-session` | Driving read-only, scope-gated authenticated sessions (stop-at-leads) | shila-hunt |
 
 ### api (7)
 | Skill | Focus | Source |
