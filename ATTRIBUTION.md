@@ -69,3 +69,11 @@ CIDR / `re:` regex matching) is a clean reimplementation of the approach in
 elementalsouls/Claude-BugHunter's engine (`engine/scope.py`), whose **code** is
 MIT-licensed (distinct from that project's CC BY 4.0 skill content). No code was
 copied verbatim; the design is credited here under MIT.
+
+## 4. Repo-original skills (1 skill)
+
+Written for this repository, not sourced from either upstream project.
+Authored for shila-hunt-bugs; covered by this repo's own license, not MIT or
+CC BY 4.0.
+
+**web:** shilahunter-authenticated-session

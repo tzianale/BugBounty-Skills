@@ -1,12 +1,16 @@
 # shila-hunt-bugs
 
 A curated, private collection of **65 bug-bounty-focused Claude skills**, drawn
-from two upstream projects and organized as `Skills/<category>/<name>/SKILL.md`:
+from two upstream projects plus 1 skill written for this repo, organized as
+`Skills/<category>/<name>/SKILL.md`:
 
 - **24 skills** from [SnailSploit/claude-red](https://github.com/SnailSploit/claude-red) — MIT
 - **40 skills** from [elementalsouls/Claude-BugHunter](https://github.com/elementalsouls/Claude-BugHunter) — CC BY 4.0 (incl. the upgraded osint-methodology)
+- **1 skill** written for this repo — `shilahunter-authenticated-session` (shila-hunt)
 
-All skills are renamed with the `shilahunter-` prefix; original authorship is unchanged.
+All skill folders use the `shilahunter-` prefix; the two upstream sets keep
+their original authorship unchanged, and the repo-original skill is covered by
+this repo's own license.
 
 See [`ATTRIBUTION.md`](./ATTRIBUTION.md) for exact provenance and license terms —
 the two sets are under **different licenses**.
